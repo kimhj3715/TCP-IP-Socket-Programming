@@ -2,13 +2,18 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
-//#include <string.h>
+#include <string.h>
+
+#define BUF_SIZE 1024
 
 void error_handling(char *message);
 
 
 int main(int argc, char *argv[]) {
 	int sock;
+	int str_len, recv_len, recv_cnt;
+	char message[BUF_SIZE];
+	char get_message[BUF_SIZE];
 	struct sockaddr_in serv_adr;
 
 
@@ -30,10 +35,36 @@ int main(int argc, char *argv[]) {
 	serv_adr.sin_port = htons(atoi(argv[2]));
 
 
-
 	// connect to the server 
+	if (connect(sock, (struct sockaddr*) &serv_adr, sizeof(serv_adr)) == -1 ) {
+		error_handling("connect() error!");
+	} else {
+		puts("Connected......");
+	}
 
+	// get input from a user and send to server
+	// and receive back from server
+	while(1) {
+		fputs("Input message (Q to quit): ", stdout);
+		fgets(message, BUF_SIZE, stdin);
+		if(!strcmp(message, "q\n") || !strcmp(message, "Q\n")) {
+			break;
+		}
 
+		str_len = write(sock, message, strlen(message));
+		recv_len = 0;
+		
+		while(recv_len < str_len) {
+			recv_cnt = read(sock, &get_message[recv_len], BUF_SIZE-1);
+			if(recv_cnt == -1) {
+				error_handling("read() error!");
+			}
+			recv_len+=recv_cnt;
+		}
+		get_message[recv_len] = 0;
+		printf("Message from server: %s\n", get_message);
+	}
+	close(sock);
 	return 0;
 }
 
