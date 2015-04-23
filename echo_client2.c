@@ -8,7 +8,6 @@
 
 void error_handling(char *message);
 
-
 int main(int argc, char *argv[]) {
 	int sock;
 	int str_len, recv_len, recv_cnt;
