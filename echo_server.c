@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
-	// create a socket
+	// create a server socket
 	serv_sock = socket(PF_INET, SOCK_STREAM, 0);
 	if(serv_sock == -1) {
 		error_handling("socket() error!");
