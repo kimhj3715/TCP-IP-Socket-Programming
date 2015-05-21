@@ -52,13 +52,13 @@ int main(int argc, char* argv[]) {
 
 	// listen
 	if(listen(serv_sock, 5) == -1) {
-		error_handling("listen() error!");	
+		error_handling("listen() error!");
 	}
 	
 	while(1) {
 		// accept
 		clnt_addr_sz = sizeof(clnt_addr);
-		clnt_sock = accept(serv_sock, (struct sockaddr*) &clnt_addr, clnt_addr_sz);
+		clnt_sock = accept(serv_sock, (struct sockaddr*)&clnt_addr, &clnt_addr_sz);
 
 		pthread_mutex_lock(&mutex);
 		clnt_socks[clnt_cnt++] = clnt_sock;
@@ -84,7 +84,8 @@ void* handle_clnt(void* arg) {
 	// if str_len returns 0, EOF (file reaches the end of the file)
 	// if str_len returns not-0, (positive) successed bytes (negative) failed
 	// In socket, EOF means socket is disconnected (ctrl+c)
-	while((str_len = read(clnt_socks, msg, sizeof(msg))) != 0) {
+	while((str_len = read(clnt_sock, msg, sizeof(msg))) != 0) {
+		fputs(msg, stdout);
 		send_msg(msg, str_len);
 	}
 
