@@ -1,6 +1,7 @@
 import socket
 import sys
 
+BUF_SIZE = 1024
 
 def main(ip, port):
 
@@ -23,9 +24,11 @@ def main(ip, port):
 
 	while(1):
 		data = raw_input("Input message(Q to quit): ")
+		if(data == "q" or data == "Q"):
+			break
 		sock.send(data)
-		sock.recv(1024)
-	print 'Received: ', repr(data) 	# prints--> Received 'hello world'
+		sock.recv(BUF_SIZE)
+		print 'Received: ', repr(data) 	# prints--> Received 'hello world'
 
 	sock.close()
 if __name__ == "__main__":

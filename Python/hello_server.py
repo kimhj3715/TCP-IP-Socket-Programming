@@ -22,6 +22,7 @@ def main(port):
 	print 'Connected by', clnt_addr
 
 	clnt_sock.send(message)
+	
 	clnt_sock.close()
 	serv_sock.close()
 

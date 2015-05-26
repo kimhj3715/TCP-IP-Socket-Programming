@@ -12,6 +12,8 @@
 // function definition
 void* error_handling(char* message);
 void* request_handler(void* arg);
+char* content_type(char* file);
+void send_data(FILE* fp, char* ct, char* file_name);
 
 int main(int argc, char *argv[]) {
 	int serv_sock, clnt_sock;
@@ -75,9 +77,58 @@ void* request_handler(void* arg) {
 	}
 
 	strcpy(method, strtok(req_line, " /"));
-	strcpy(file_name, strtok(NULL, ));
+	strcpy(file_name, strtok(NULL, " /"));
+	strcpy(ct, content_type(file_name));
 
+	if(strcmp(method, "GET") != 0) {
+		send_error(clnt_write);
+		fclose(clnt_read);
+		fclose(clnt_write);
+		return;
+	}
+	fclose(clnt_read);
+	send_data(clnt_write, ct, file_name);
+}
 
+void send_data(FILE* fp, char* ct, char* file_name) {
+	char protocol[] = "HTTP/1.0 200 OK\r\n";
+	char server[] = "Server:Linux Web Server \r\n";
+	char cnt_len[] = "Content-length:2048\r\n";
+	char cnt_type[SMALL_BUF];
+	FILE* send_file;
+
+	printf("PASSED FILE NAME:::::: %s\n", file_name);
+	sprintf(cnt_type, "Content-type:%s\r\n\r\n", ct);
+	send_file = fopen(file_name, "r");
+	if(send_file == NULL) {
+		send_error(fp);
+		return;
+	}
+
+	fputs(protocol, fp);
+	fputs(server, fp);
+	fputs(cnt_len, fp);
+	fputs(cnt_type, fp);
+
+	while(fgets(buf, BUF_SIZE, send_file) != NULL) {
+		fputs(buf, fp);
+		fflush(fp);
+	}
+	fflush(fp);
+	fclose(fp);
+}
+
+char* content_type(char* file) {
+	char extension[SMALL_BUF];
+	char file_name[SMALL_BUF];
+	strcpy(file_name, file);
+	strtok(file_name, ".");
+	strcpy(extension, strtok(NULL, "."));
+	if(!strcmp(extension, "html") || !strcmp(extension, "htm")) {
+		return "text/html";
+	} else {
+		return "text/plain";
+	}
 }
 
 void send_error(FILE* fp) {
