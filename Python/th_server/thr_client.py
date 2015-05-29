@@ -17,7 +17,7 @@ def main():
 
 	while 1:
 		send_data = raw_input("Input a message('Q' or 'q' to quit): ")
-		print >> sys.stderr, 'sending "%s"' % send_data
+		print >> sys.stderr, '[Send] %s' % send_data
 		sock.sendall(send_data)
 
 		# Look for the response
@@ -27,11 +27,11 @@ def main():
 		while amount_received < amount_expected:
 			recv_data = sock.recv(16)
 			amount_received += len(recv_data)
-			print >> sys.stderr, 'received "%s"' % recv_data
+			print >> sys.stderr, '[Recv] %s' % recv_data
 
 
 		if(send_data is 'q' or send_data is 'Q'):
-			print >> sys.stderr, 'closing socket. '
+			print >> sys.stderr, 'Request for disconnecting... closing socket... '
 			sock.close()
 			break
 	return 0

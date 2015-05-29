@@ -34,8 +34,8 @@ def main():
 
 		thread = Thread(target = handle_clnt, args = (clnt_sock, clnt_addr))
 		thread.start()
-		thread.join()
-		print >> sys.stderr, 'thread finished... exiting'
+		#thread.join()
+		
 
 	return 0
 
@@ -49,12 +49,13 @@ def handle_clnt(sock, sock_addr):
 		print >> sys.stderr, 'connection from', clnt_addr
 		while 1:
 			recv_data = clnt_sock.recv(16)
-			print >> sys.stderr, 'received "%s" ' % recv_data
+			print >> sys.stderr, '%s: %s' % (clnt_addr[0], recv_data)
 			if recv_data:
-				print >> sys.stderr, 'sending recv_data back to the client'
+				# print >> sys.stderr, 'sending recv_data back to the client'
 				clnt_sock.sendall(recv_data)
 			else:
 				print >> sys.stderr, 'no more data from', clnt_addr
+				print >> sys.stderr, 'thread finished... exiting'
 				break
 	finally:
 		clnt_sock.close()
