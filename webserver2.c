@@ -27,7 +27,6 @@ int main(int argc, char *argv[]) {
 		printf("Usage %s [port]\n", argv[0]);
 		exit(1);
 	}
-
 	// create a socket
 	serv_sock = socket(PF_INET, SOCK_STREAM, 0);
 	// initialize the server address
