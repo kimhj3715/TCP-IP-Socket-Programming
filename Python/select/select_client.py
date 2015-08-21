@@ -1,3 +1,8 @@
+# problems
+
+# if server is down, the client should indicate the failure of server side problem
+# but it is not showing anything even client shows the connection is still available 
+
 import socket
 import sys
 
@@ -31,6 +36,7 @@ def main(ip, port):
 		print 'Received: ', repr(data) 	# prints--> Received 'hello world'
 
 	sock.close()
+	
 if __name__ == "__main__":
 	if(len(sys.argv) != 3):
 		print >> sys.stderr, 'Usage : %s <ip> <port>' % sys.argv[0]
