@@ -31,6 +31,7 @@ def main(ip, port):
 		print 'Received: ', repr(data) 	# prints--> Received 'hello world'
 
 	sock.close()
+	
 if __name__ == "__main__":
 	if(len(sys.argv) != 3):
 		print >> sys.stderr, 'Usage : %s <ip> <port>' % sys.argv[0]
