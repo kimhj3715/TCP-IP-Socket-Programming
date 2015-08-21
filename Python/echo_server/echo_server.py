@@ -3,7 +3,6 @@ import socket
 import sys
 
 BUF_SIZE = 1024
-
 port = 0
 
 def main():
